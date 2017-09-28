@@ -45,11 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbUtilities\DbSysUtils.cs" />
+    <Compile Include="MapperUtilities\MapperUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MapperUtilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
