@@ -9,8 +9,10 @@ namespace Gtor.Utils.DbUtilities
 {
     public interface IDbSysUtils
     {
-        IEnumerable<SqlParameter> GetParametersFromSp(string connectionString, string storeProcedureName);
+        IEnumerable<SqlParameter> GetParametersFromSP(string connectionString, string storedProcedureName);
         void SetParametersToNull(SqlParameterCollection sqlParameters);
+        IEnumerable<string> GetTablesFromSP(string connectionString, string storedProcedureName);
+
     }
 
     public class DbSysUtils : IDbSysUtils
@@ -26,15 +28,15 @@ namespace Gtor.Utils.DbUtilities
             _storedProcedureName = storedProcedureName ?? ConfigurationManager.AppSettings["storedProcedure"];
         }
 
-        public IEnumerable<SqlParameter> GetParametersFromSp(string connectionString, string storeProcedureName)
+        public IEnumerable<SqlParameter> GetParametersFromSP(string connectionString, string storedProcedureName)
         {
             if (!string.IsNullOrWhiteSpace(connectionString))
             {
                 _connectionString = connectionString;
             }
-            if (!string.IsNullOrWhiteSpace(storeProcedureName))
+            if (!string.IsNullOrWhiteSpace(storedProcedureName))
             {
-                _storedProcedureName = storeProcedureName;
+                _storedProcedureName = storedProcedureName;
             }
 
             var parameterList = new List<SqlParameter>();
@@ -90,5 +92,41 @@ namespace Gtor.Utils.DbUtilities
                 throw;
             }
         }
+
+        public IEnumerable<string> GetTablesFromSP(string connectionString, string storedProcedureName)
+        {
+            try
+            {
+                var sqlConnection = new SqlConnection(connectionString);
+                var cmd = new SqlCommand
+                {
+                    CommandText = $"SELECT DISTINCT OBJECT_NAME(depid) AS Tables FROM sysdepends WHERE id = OBJECT_ID('{storedProcedureName}')",
+                    CommandType = CommandType.Text,
+                    Connection = sqlConnection
+                };
+
+                sqlConnection.Open();
+
+                var reader = cmd.ExecuteReader();
+                var dt = new DataTable();
+                dt.Load(reader);
+
+                var tablesList = new List<string>();
+                for (var rowIndex = 0; rowIndex < dt.Rows.Count; rowIndex++)
+                {
+                    tablesList.Add(dt.Rows[rowIndex]["Tables"].ToString());
+                }
+
+                sqlConnection.Close();
+
+                return tablesList;
+            }
+            catch (Exception exception)
+            {
+                Debug.Write($"It's not possible to return a tables from this Stored Procedure: {storedProcedureName}.\nError: {exception.Message}");
+                throw;
+            }
+        }
+
     }
 }

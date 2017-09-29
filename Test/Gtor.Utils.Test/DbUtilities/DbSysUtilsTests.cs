@@ -12,7 +12,7 @@ namespace Gtor.Utils.Test.DbUtilities
     public class DbSysUtilsTests
     {
         private string _connectionString;
-        private string _storeProcedureName;
+        private string _storedProcedureName;
 
         private DbSysUtils _target;
 
@@ -22,32 +22,32 @@ namespace Gtor.Utils.Test.DbUtilities
             _connectionString = "Data Source=ky1-vrt-msqld1.ky.cafepress.com;" +
                                 "Initial Catalog=transit;User ID=cpdba;Password=ithinkgreen";
 
-            _target = new DbSysUtils(_connectionString, _storeProcedureName);
+            _target = new DbSysUtils(_connectionString, _storedProcedureName);
         }
 
         [Test]
-        public void Test_GetParametersFromSp()
+        public void Test_GetParametersFromSP()
         {
             //Arrange
             const string expected = "@inOrderNo";
-            _storeProcedureName = "GET_SHIPMENT_BY_ORDER_NO";
+            _storedProcedureName = "GET_SHIPMENT_BY_ORDER_NO";
 
             // Act
-            var listParameters = _target.GetParametersFromSp(_connectionString, _storeProcedureName).ToList();
+            var listParameters = _target.GetParametersFromSP(_connectionString, _storedProcedureName).ToList();
 
             // Assert
             Assert.AreEqual(expected, listParameters.FirstOrDefault()?.ParameterName);
         }
 
         [Test]
-        public void Test_GetParametersFromSp_OnAnyError()
+        public void Test_GetParametersFromSP_OnAnyError()
         {
             //Arrange
             _connectionString = "badConnectionString";
-            _storeProcedureName = "badStoredProcedure";
+            _storedProcedureName = "badStoredProcedure";
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => _target.GetParametersFromSp(_connectionString, _storeProcedureName));
+            Assert.Throws<ArgumentException>(() => _target.GetParametersFromSP(_connectionString, _storedProcedureName));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace Gtor.Utils.Test.DbUtilities
         {
             //Arrange
             var command = new SqlCommand();
-            command.Parameters.Add(new SqlParameter("Name", DbType.Int64));
+            command.Parameters.Add(new SqlParameter("ORDER_NO", DbType.Int64));
             command.Parameters[0].Value = int.MaxValue;
 
             var sqlParameters = command.Parameters;
@@ -65,6 +65,32 @@ namespace Gtor.Utils.Test.DbUtilities
 
             // Assert
             Assert.AreEqual(DBNull.Value, command.Parameters[0].Value);
+        }
+
+        [Test]
+        public void Test_GetTablesFromSP()
+        {
+            // Arrange
+            const string expected = "SHIPMENT";
+            _storedProcedureName = "GET_SHIPMENT_BY_ORDER_NO";
+
+            // Act
+            var result = _target.GetTablesFromSP(_connectionString, _storedProcedureName);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expected, result.FirstOrDefault());
+        }
+
+        [Test]
+        public void Test_GetTablesFromSP_OnAnyError()
+        {
+            // Arrange
+            _connectionString = "testconnectionString";
+            _storedProcedureName = "teststoreProcedure";
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _target.GetTablesFromSP(_connectionString, _storedProcedureName));
         }
     }
 }
