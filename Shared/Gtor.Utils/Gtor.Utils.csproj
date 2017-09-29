@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbUtilities\DbSysUtils.cs" />
+    <Compile Include="Models\CaseType.cs" />
+    <Compile Include="StringUtilities\StringUtils.cs" />
     <Compile Include="TypeUtilities\TypeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbUtilities\DbSysUtilsTests.cs" />
+    <Compile Include="StringUtilities\StringUtilsTests.cs" />
     <Compile Include="TypeUtilities\TypeUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
