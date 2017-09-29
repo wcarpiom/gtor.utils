@@ -13,44 +13,30 @@ namespace Gtor.Utils.Test.DbUtilities
     {
         private string _connectionString;
         private string _storeProcedureName;
-        private string _tableName;
 
         private DbSysUtils _target;
 
         [SetUp]
         public void SetUp()
         {
-            _connectionString = "Data Source=localhost;" +
-                                "Initial Catalog=SoTour;" +
-                                "Integrated Security=SSPI;";
-            _storeProcedureName = "GET_PLAYER";
-            _tableName = "Player";
+            _connectionString = "Data Source=ky1-vrt-msqld1.ky.cafepress.com;" +
+                                "Initial Catalog=transit;User ID=cpdba;Password=ithinkgreen";
 
-            _target = new DbSysUtils(_connectionString, _storeProcedureName, _tableName);
+            _target = new DbSysUtils(_connectionString, _storeProcedureName);
         }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _target = null;
-            _connectionString = null;
-            _storeProcedureName = null;
-            _tableName = null;
-        }
-
 
         [Test]
         public void Test_GetParametersFromSp()
         {
             //Arrange
-            const string expected = "@inId";
-            _storeProcedureName = "GET_PLAYER_BY_ID";
+            const string expected = "@inOrderNo";
+            _storeProcedureName = "GET_SHIPMENT_BY_ORDER_NO";
 
             // Act
             var listParameters = _target.GetParametersFromSp(_connectionString, _storeProcedureName).ToList();
 
             // Assert
-            Assert.AreEqual(expected, listParameters[0].ParameterName);
+            Assert.AreEqual(expected, listParameters.FirstOrDefault()?.ParameterName);
         }
 
         [Test]

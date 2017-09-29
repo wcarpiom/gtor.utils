@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbUtilities\DbSysUtils.cs" />
-    <Compile Include="MapperUtilities\MapperUtils.cs" />
+    <Compile Include="TypeUtilities\TypeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

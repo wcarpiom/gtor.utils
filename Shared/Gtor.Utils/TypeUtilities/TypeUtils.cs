@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Gtor.Utils.MapperUtilities
+namespace Gtor.Utils.TypeUtilities
 {
-    public interface IMapperUtils
+    public interface ITypeUtils
     {
-        string GetStringTypeByType(Type dataType);
+        string GetFriendlyNameByType(Type dataType);
     }
-    public class MapperUtils : IMapperUtils
+    public class TypeUtils : ITypeUtils
     {
-        private static readonly Dictionary<Type, string> DataTypeRepo = new Dictionary<Type, string>
+        private static readonly Dictionary<Type, string> TypeToStringRepo = new Dictionary<Type, string>
         {
             [typeof(byte)] = "byte",
             [typeof(sbyte)] = "sbyte",
@@ -31,13 +31,13 @@ namespace Gtor.Utils.MapperUtilities
             [typeof(byte[])] = "byte[]"
         };
 
-        public string GetStringTypeByType(Type dataType)
+        public string GetFriendlyNameByType(Type dataType)
         {
-            if (!DataTypeRepo.ContainsKey(dataType))
+            if (!TypeToStringRepo.ContainsKey(dataType))
             {
                 throw new ArgumentException($"Type \"{dataType}\" not recognized as valid data type.");
             }
-            return DataTypeRepo[dataType];
+            return TypeToStringRepo[dataType];
         }
     }
 }

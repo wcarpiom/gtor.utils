@@ -16,22 +16,30 @@ namespace Gtor.Utils.DbUtilities
     public class DbSysUtils : IDbSysUtils
     {
         private string _connectionString;
-        private string _storeProcedureName;
-        private string _tableName;
+        private string _storedProcedureName;
 
-        public DbSysUtils() : this(null, null, null) { }
+        public DbSysUtils() : this(null, null) { }
 
-        public DbSysUtils(string connectionString, string storeProcedureName, string tableName)         {
+        public DbSysUtils(string connectionString, string storedProcedureName)
+        {
             _connectionString = connectionString ?? ConfigurationManager.AppSettings["connectionString"];
-            _storeProcedureName = storeProcedureName ?? ConfigurationManager.AppSettings["storedProcedure"];
-            _tableName = tableName ?? ConfigurationManager.AppSettings["tableName"];
+            _storedProcedureName = storedProcedureName ?? ConfigurationManager.AppSettings["storedProcedure"];
         }
 
         public IEnumerable<SqlParameter> GetParametersFromSp(string connectionString, string storeProcedureName)
         {
+            if (!string.IsNullOrWhiteSpace(connectionString))
+            {
+                _connectionString = connectionString;
+            }
+            if (!string.IsNullOrWhiteSpace(storeProcedureName))
+            {
+                _storedProcedureName = storeProcedureName;
+            }
+
             var parameterList = new List<SqlParameter>();
-            var sqlConnection = new SqlConnection(connectionString);
-            var command = new SqlCommand(storeProcedureName, sqlConnection)
+            var sqlConnection = new SqlConnection(_connectionString);
+            var command = new SqlCommand(_storedProcedureName, sqlConnection)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -59,8 +67,8 @@ namespace Gtor.Utils.DbUtilities
             }
             catch (Exception e)
             {
-                Debug.Write("It's not possible Get parameters from Stored Procedure: " + storeProcedureName + ", Error: " +
-                            e.Message);
+                Debug.Write("It's not possible Get parameters from Stored Procedure: " + _storedProcedureName + ", Error: " +
+                    e.Message);
                 throw;
             }
 
@@ -78,8 +86,7 @@ namespace Gtor.Utils.DbUtilities
             }
             catch (Exception e)
             {
-                Debug.Write("It's not possible Set Parameters to Null, Error: " +
-                            e.Message);
+                Debug.Write("It's not possible Set Parameters to Null, Error: " + e.Message);
                 throw;
             }
         }
