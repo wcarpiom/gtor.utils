@@ -109,14 +109,14 @@ namespace Gtor.Utils.Test.StringUtilities
         }
 
         [Test]
-        public void Test_SplitListOfWordsInUpperCase()
+        public void Test_SpecialAddressSplit()
         {
             // Arrange
             var inputList = new List<string> { "133WoodlandDr", "7300North500East" };
             var expectedOutputList = new List<string> { "133 Woodland Dr", "7300 North 500 East" };
 
             // Act
-            var result = inputList.SplitListOfWordsInUpperCase();
+            var result = inputList.SpecialSplit();
 
             // Assert
             Assert.AreEqual(expectedOutputList, result);

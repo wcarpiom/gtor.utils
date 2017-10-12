@@ -67,10 +67,10 @@ namespace Gtor.Utils.StringUtilities
             return output;
         }
 
-        public static List<string> SplitListOfWordsInUpperCase(this List<string> inputList)
+        public static List<string> SpecialSplit(this List<string> inputList)
         {
             if (inputList == null)
-                throw new ArgumentException("List input string is null, empty or white space");
+                throw new ArgumentException("List input string is null.");
 
             var outputList = new List<string>();
             foreach (var input in inputList)
