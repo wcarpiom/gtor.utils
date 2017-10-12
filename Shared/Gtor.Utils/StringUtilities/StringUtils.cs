@@ -33,20 +33,37 @@ namespace Gtor.Utils.StringUtilities
             return outputInCaseType;
         }
 
-        private static string SplitWordInUpperCase(this string input)
+        private static string EatWholeNumber(string input, ref int index)
         {
-            string output = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                throw new ArgumentException("Input string is null, empty or white space: ", input);
-
-            foreach (var letter in input)
+            var result = string.Empty;
+            while (index < input.Length && char.IsNumber(input[index]))
             {
-                if (char.IsUpper(letter))
-                    output += " " + letter;
-                else
-                    output += letter;
+                result += input[index];
+                index++;
             }
+            index--;
+            return result;
+        }
+
+        private static string SpecialAddressSplit(this string input)
+        {
+            var output = string.Empty;
+            input = input ?? string.Empty;
+
+            for (var index = 0; index < input.Length; index++)
+            {
+                if (char.IsNumber(input[index]) && index == 0)
+                    output += EatWholeNumber(input, ref index);
+                else if (char.IsNumber(input[index]) && index > 0)
+                    output += " " + EatWholeNumber(input, ref index);
+                else if (char.IsUpper(input[index]))
+                    output += " " + input[index];
+                else if (char.IsLower(input[index]))
+                    output += input[index];
+                else
+                    output += input[index];
+            }
+
             return output;
         }
 
@@ -58,7 +75,7 @@ namespace Gtor.Utils.StringUtilities
             var outputList = new List<string>();
             foreach (var input in inputList)
             {
-                outputList.Add(input.SplitWordInUpperCase());
+                outputList.Add(input.SpecialAddressSplit());
             }
             return outputList;
         }
