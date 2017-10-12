@@ -1,5 +1,6 @@
 ﻿using Gtor.Utils.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Gtor.Utils.StringUtilities
 {
@@ -32,7 +33,7 @@ namespace Gtor.Utils.StringUtilities
             return outputInCaseType;
         }
 
-        public static string SplitInUpperCase(this string input)
+        private static string SplitWordInUpperCase(this string input)
         {
             string output = null;
 
@@ -41,13 +42,25 @@ namespace Gtor.Utils.StringUtilities
 
             foreach (var letter in input)
             {
-                if (Char.IsUpper(letter))
+                if (char.IsUpper(letter))
                     output += " " + letter;
                 else
                     output += letter;
             }
             return output;
+        }
 
+        public static List<string> SplitListOfWordsInUpperCase(this List<string> inputList)
+        {
+            if (inputList == null)
+                throw new ArgumentException("List input string is null, empty or white space");
+
+            var outputList = new List<string>();
+            foreach (var input in inputList)
+            {
+                outputList.Add(input.SplitWordInUpperCase());
+            }
+            return outputList;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Gtor.Utils.StringUtilities;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Gtor.Utils.Test.StringUtilities
 {
@@ -108,17 +109,17 @@ namespace Gtor.Utils.Test.StringUtilities
         }
 
         [Test]
-        public void Test_SplitInUpperCase()
+        public void Test_SplitListOfWordsInUpperCase()
         {
             // Arrange
-            const string inputAddress = "133WoodlandDr";
-            const string expectedAddress = "133 Woodland Dr";
+            var inputList = new List<string> { "133WoodlandDr", "350WestBroadway" };
+            var expectedOutputList = new List<string> { "133 Woodland Dr", "350 West Broadway" };
 
             // Act
-            var result = inputAddress.SplitInUpperCase();
+            var result = inputList.SplitListOfWordsInUpperCase();
 
             // Assert
-            Assert.AreEqual(expectedAddress, result);
+            Assert.AreEqual(expectedOutputList, result);
         }
     }
 }
