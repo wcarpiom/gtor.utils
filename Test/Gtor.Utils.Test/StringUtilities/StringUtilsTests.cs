@@ -106,5 +106,19 @@ namespace Gtor.Utils.Test.StringUtilities
 
             Assert.Throws<ArgumentOutOfRangeException>(() => _inputWord.TransformTo(badCaseType));
         }
+
+        [Test]
+        public void Test_SplitInUpperCase()
+        {
+            // Arrange
+            const string inputAddress = "133WoodlandDr";
+            const string expectedAddress = "133 Woodland Dr";
+
+            // Act
+            var result = inputAddress.SplitInUpperCase();
+
+            // Assert
+            Assert.AreEqual(expectedAddress, result);
+        }
     }
 }

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gtor.Utils.Models;
+﻿using Gtor.Utils.Models;
+using System;
 
 namespace Gtor.Utils.StringUtilities
 {
@@ -34,6 +30,24 @@ namespace Gtor.Utils.StringUtilities
                     throw new ArgumentOutOfRangeException($"That option is not available for {nameof(caseType)} , {caseType}");
             }
             return outputInCaseType;
+        }
+
+        public static string SplitInUpperCase(this string input)
+        {
+            string output = null;
+
+            if (string.IsNullOrWhiteSpace(input))
+                throw new ArgumentException("Input string is null, empty or white space: ", input);
+
+            foreach (var letter in input)
+            {
+                if (Char.IsUpper(letter))
+                    output += " " + letter;
+                else
+                    output += letter;
+            }
+            return output;
+
         }
     }
 }
